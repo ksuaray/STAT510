@@ -1,0 +1,76 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+install.packages("corrplot")
+install.packages("car")
+```
+
+
+```{r}
+library(corrplot)
+library(car)
+```
+
+```{r}
+pizza <- read_csv("/Volumes/5ive3rds/CSULB/Classes/510/Data/ASCII-comma/Chapter 05/pizza.txt")
+```
+
+
+```{r}
+fit12<-lm(Sales~X1+X2,data=pizza)
+fit1<-lm(Sales~X1,data=pizza)
+fit2<-lm(Sales~X2,data=pizza)
+summary(fit12)
+summary(fit1)
+summary(fit2)
+```
+
+Scatterplot matrix
+```{r}
+plot(pizza)
+```
+
+Correlation matrix and plots
+```{r}
+Cp<-cor(pizza[,2:3])
+Cp
+```
+Correlation matrix and plots
+```{r}
+corrplot(Cp,method="color")
+```
+
+VIFs
+```{r}
+solve(Cp)
+```
+
+
+
+MARKET DATA
+```{r}
+market <- read_csv("/Volumes/5ive3rds/CSULB/Classes/510/Data/ASCII-comma/Chapter 07/market.txt")
+```
+
+```{r}
+Cm<-cor(market[,4:7])
+```
+
+```{r}
+fitm<-lm(Y1~X1+X2+X3+X4,data=market)
+summary(fitm)
+```
+
+Inverse Correlation matrix
+```{r}
+solve(Cm)
+```
+
+VIFs
+```{r}
+car::vif(fitm)
+```
+

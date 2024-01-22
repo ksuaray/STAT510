@@ -1,0 +1,97 @@
+---
+title: "STAT 510 Lectures 3-4"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+This first chunk of code sets the "working directory" as the folder where you have downloaded the "KutnerData" folder. Replace the path between the 'apostrophes' with the path on your device. Then press the green "play" button to run it.
+
+```{r, setup, include=FALSE}
+knitr::opts_knit$set(root.dir = '/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Chapter  1 Data Sets/')
+```
+
+
+Now, to import the data into R for analysis, we will use the **readr** package. Since it is not activated by default, we need to run the *library* command:
+
+```{r}
+library(readr)
+```
+
+Let's continue to work with Exercise 1.21
+
+```{r}
+CH01PR21 <- read_table("CH01PR21.txt", col_names = FALSE)    #This code imports the data
+
+y<-CH01PR21$X1      #This code renames the variables
+x<-CH01PR21$X2
+
+fit1.21<-lm(y~x)
+```
+
+
+Model summary with parameter estimates, standard errors, test statistics, p-values and more
+Exercise 2.6b
+
+```{r}
+summary(fit1.21)
+```
+
+
+Parameter Estimation
+Exercise 2.6a
+
+```{r}
+confint(fit1.21)
+```
+
+Let's verify
+
+```{r}
+print("Lower limit")
+fit1.21$coefficients[2]-qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5
+print("Upper limit")
+fit1.21$coefficients[2]+qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5
+```
+
+
+Confidence intervals for mean response and prediction intervals for future independent responses.
+Exercise 2.15ab
+
+```{r}
+#Create a data frame with new explanatory values
+newdata<-data.frame(x=c(2,4))
+print("Fitted value, lower and upper bounds for confidence interval")
+predict(fit1.21,newdata,interval="confidence",level = .99)
+#The two rows of out correspond to x=2 and x=4 respectively
+
+print("Fitted value, lower and upper bounds for prediction interval")
+predict(fit1.21,newdata,interval="predict",level = .99)
+
+summary(fit1.21)
+```
+
+Confidence band
+```{r}
+print("Lower limit")
+fit1.21$coefficients[2]-qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5
+print("Upper limit")
+fit1.21$coefficients[2]+qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5
+```
+
+
+Anova table
+```{r}
+anova(fit1.21)
+```
+
+
+
+
+
+
+
+
+
+
+

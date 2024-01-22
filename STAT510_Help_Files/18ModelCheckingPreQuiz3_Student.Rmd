@@ -1,0 +1,94 @@
+---
+title: "Pre-Quiz3"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+library(car)
+library(MASS)
+library(corrplot)
+library(olsrr)
+library(caret)
+library(ROCit)
+```
+
+Pre-Quiz3 Group Exercise
+
+EXAMPLE 1: Hypertensive drugs are used routinely to lower a patient’s blood pressure, and such drugs are administered continuously during surgery. Since surgery times vary, the total amount of the drug that is administered varies from case to case. Also, patients react differently to such drugs, and hence blood pressure during surgery varies across patients. The sooner blood pressure rises to normal levels, the better. The recovery time (i.e., the time it takes for a patient's systolic blood pressure to return to normal) is an important variable. 
+  The following table lists for a sample of 53 patients, the recovery time, the logarithm of the administered dose, and the average systolic blood pressure while the drug is being administered. Discuss how recovery time is related to the dose and the blood pressure that is achieved during surgery. Fit appropriate regression models, check for model violations, and interpret the results. Explore the usefulness of transformations on the response.
+
+```{r}
+recovery <- 
+```
+
+1. Run the standard MLR model for this data. Are there any concerns?
+```{r}
+ 
+```
+2. Investigate multicollinearity.
+```{r}
+ 
+```
+
+I. Checking for Wrong Functional Form
+
+3. Perform added variable plots for both $X_1$ and $X_2$. What is the benefit of these plots? Based on thr output in 1., how could these plots be particularly useful?
+```{r}
+
+ ```
+
+
+II. Checking for Violation of Assumptions on Error
+
+4. Apply the plot function to the fit object. Make a note of any obvious violations.
+```{r}
+
+```
+
+
+5. Plot a histogram of the studentized residuals. Does it confirm your observations in 4.?
+```{r}
+
+```
+
+6. Does heteroscedasticity seem to be at play? Let's run Box-Cox to diagnose. 
+```{r}
+
+```
+
+If prescribed, apply the appropriate (whole-number) transformation.
+```{r}
+ 
+```
+
+7. Re-run the plots from 4. and 5. above with the transformed model. Do you observe any improvement?
+```{r}
+
+
+```
+
+
+
+8. Let's investigate leverage. The *hatvalues* function in the pre-loaded stats package will yield the $h_{ii}$ values for us.
+```{r}
+plot(recovery$X1,recovery$X2) #2D Plot of the predictor space. Any points far from the centroid?
+summary(hatvalues(fit)) #summary stats on the Leverage
+2*((dim(recovery)[2]-1)/dim(recovery)[1]) #Average Leverage
+```
+Now let's make a note of the high leverage observation
+```{r}
+which(hatvalues(fit)>0.0754717)
+```
+Confirming:
+```{r}
+tail(hatvalues(fit))
+```
+ 
+9. Now let's see which high leverage observations are actually influential. Plot the DFBETAS, DEFITS and Cook's D statistics. Do this for the model before and after the transformation and compare.
+```{r}
+
+
+```
+10. Conclude with observations and recommendations for how to proceed with the using this model for estimation and prediction.
+

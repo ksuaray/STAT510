@@ -1,0 +1,78 @@
+---
+title: "Model Checking 1"
+output: html_notebook
+---
+
+```{r}
+install.packages("car")
+install.packages("MASS")
+```
+
+
+```{r}
+library(car)
+library(MASS)
+```
+
+To get an idea of what model checking is accomplishing, let's create a data set for which we know the true relationship between predictors and response
+```{r}
+xk1<-round(rexp(50,rate=0.2))
+table(xk1)
+```
+```{r}
+xk2<-round(runif(50,1,9),1)
+hist(xk2)
+xk22<-xk2^2
+```
+
+```{r}
+ek<-rnorm(50,0,3)
+yk<--0.9*xk1+2*xk2+3*xk22+ek
+dk<-data.frame(yk=yk,xk1=xk1,xk2=xk2,xk22=xk22)
+```
+
+In what follows, we will consider two scenarios, one excluding the quadratic term, and one including it. It will be helpful to compare and contrast the results and graphs produced for each characteristic mentioned.
+
+I. Wrong Functional Form
+SCENARIO 1
+```{r}
+fitk<-lm(yk~xk1+xk2)
+summary(fitk)
+```
+
+```{r}
+car::avPlots(fitk)
+```
+
+SCRNARIO 2
+```{r}
+fitkn<-lm(yk~xk1+xk2+xk22)
+summary(fitkn)
+avPlots(fitkn)
+```
+
+
+II. Assumptions on Error Violated
+SCENARIO 1
+Residual plots from plot() function
+```{r}
+plot(fitk)
+```
+
+More descriptive statistics from studentized residuals: To calculate the studentized residuals from the fit object, we use the studres function in the MASS package
+
+```{r}
+summary(studres(fitk)) #summary statistics
+hist(studres(fitk)) #histogram
+```
+
+
+SCENARIO 2
+```{r}
+plot(fitkn)
+```
+More descriptive statistics from studentized residuals: 
+```{r}
+summary(studres(fitkn)) #summary statistics
+hist(studres(fitkn)) #histogram
+```

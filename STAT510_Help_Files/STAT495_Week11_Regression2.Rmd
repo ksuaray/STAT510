@@ -1,0 +1,192 @@
+---
+title: 'STAT 495 Week 10: Regression in R part 2'
+output:
+  html_notebook: default
+  word_document: default
+---
+
+For today's module, we will be refrencing last week's intro to regression, so be sure to have it open and the modified cereal data loaded. In addition, the following packages are needed for today's module:
+```{r}
+library(caret)
+library(doSNOW)
+library(DAAG)
+library(ISLR)
+library(caTools)
+library(e1071)
+library(ResourceSelection)
+```
+
+**Caret** (*C*lassification And *RE*gression *T*raining) is an extremely flexible and customizable package for statistical learning. In addition to being able to handle user-defined methods, there is a robust list of built in ones found [here](https://topepo.github.io/caret/train-models-by-tag.html#Random_Forest).
+
+##K-Fold Cross Validation
+Splitting our data into a training and testing set is feasible when our sample size is large. For the cereal data, in which $n=77$, removing 15 observations from the model building process may be an expensive decision, as it takes valuable information away from the model we create. K-fold cross validation is an alternative approach that methodically utilizes the entire data set for both training and testing. 
+
+```{r out.width="10%"}
+include_graphics("https://www.dropbox.com/s/6acub51abzyl78d/k_fold.week11.jpg?dl=1")
+```
+
+#![](https://www.dropbox.com/s/6acub51abzyl78d/k_fold.week11.jpg?dl=1)
+
+As can be seen by the flowchart, we partition the data into k randomly selected subsets or "folds" of approximately equal size ($n/k$). We then hold out the first fold as a testing set, and utilize the remaining data as the training set. Measures of error (such as MSE or misclassification error) and/or goodness of fit such as (AIC or AUC). In one extreme, when $k=n$, k-fold cross validation becomes it's predecessor, leave one out cross validaiton (loocv). This approach yields many benefits, a couple of which are
+
+*When $k$ is chosen appropriately (typical values are 5 or 10, depending on the number of cases in our data), the tendency to overfit training data is reduced (larger values of $k$ reduce bias. Why?). Thus model performance metrics are more reliable for approximating the model's ability to predict response values in new data.
+
+*This approach provides a natural ground for parameter tuning. 
+
+The following flowchart from [Kuhn and Johnson]() (the companion text to the **caret** package) gives a clear picture of the overall model building process:
+
+![](https://www.dropbox.com/s/masl0ho9q5x3tra/partune.week11.jpg?dl=1)
+
+
+As with just about any method in R, there are multiple packages with functions that perform k-fold cross validation. Of course, we could use some of the fundamental functions we have discussed over the past few weeks to create our own function. For the purposes of this module, we will use the *caret* package to do the heavy lifting for the cross validation process, due to its flexibility and utility for the model building process from start to finish.
+
+```{r}
+k<-10
+set.seed(1)
+cv.10fold<-createMultiFolds(y=cer4$rating.4,k=k,times=1)
+tc1<-trainControl(method="cv",number=k,index=cv.10fold)
+
+
+cer4_lm.cv10<-train(x=select(cer4,c(sugars,protein,potass)),y=cer4$rating.4,method="lasso",tuneGrid=data.frame(fraction=c(seq(0.7,1,0.05))), trControl=tc1)
+
+#cer4_lm.cv10<-train(form=rating.4~sugars+protein+potass,data=cer4, method="lm",tuneLength=2, trControl=tc1)
+
+cer4_lm.cv10
+```
+
+
+10-fold gives us a better predictive model than what we saw with the holdout set last week. This may actually indicate overfitting. Common sense would dictate that using a number of folds that matches the percentage of unseen data in the hold out set would yield results more consistent with those from last week:
+
+```{r}
+15/77
+```
+The 20% size recommends implementing 5-fold cv:
+
+```{r}
+k<-5
+cv.5fold<-createMultiFolds(y=cer4$rating.4,k=k,times=1)
+tc1<-trainControl(method="cv",number=k,index=cv.5fold)
+
+set.seed(1)
+
+cer4_lm.cv5<-suppressWarnings(train(form=rating.4~sugars+protein+potass,data=cer4, method="lm",tuneLength=2, trControl=tc1))
+
+#Alternatively we can input: cer4_lm.cv5<-train(x=select(cer4,c(sugars,protein,potass)),y=cer4$rating.4,method="lm",tuneLength=2, trControl=tc1)
+
+cer4_lm.cv5
+```
+
+We see that the results are more comparable, indicating that we were lucky with a good train/test split last week.
+
+1) **Describe in your own words what you see the *createMultiFolds*, *trainControl*, and *train* functions are accomplishing.**
+
+
+Clearly k-fold cross validation is superior to data splitting, in which we essentially hold out one fold for testing, and train the model on the remaining data once. However we know that k-fold represents but one of many possible partitions of our data. Thus an even more robust way of maximizing our use of the data would be to perform k-fold multiple times with different partitions. In the code below, we implement 5-fold cross validation for 10 unique partitions of the data. One can imagine that this process will be computationally expensive. As a result, we would like to maximize the ability of our processor to efficiently and quickly handle the required computaitons:
+```{r}
+k<-5
+re<-10
+
+cv.10fold10<-createMultiFolds(y=cer4$rating.4,k=k,times=re)
+
+tc1<-trainControl(method="repeatedcv",number=k,repeats=re,index=cv.10fold10)
+
+cl1<-makeCluster(spec=2,type="SOCK")
+registerDoSNOW(cl1)
+
+set.seed(1)
+
+cer4_lm.cv1<-train(x=select(cer4,c(sugars,protein,potass)),y=cer4$rating.4,method="lm", trControl=tc1)
+
+stopCluster(cl1)
+
+cer4_lm.cv1
+```
+
+NOTE: If after running a function on a cluster you get the following error: 
+
+**Error in summary.connection(connection) : invalid connection**
+
+you can remove it by running the following command:
+
+```{r}
+registerDoSEQ() 
+```
+
+2) **Now using all variables in the cereal4 data, repeat the above 5-fold cross validation.**
+
+##Binary Regression
+
+In the ISLR package, we'll use the **College** data to facilitate our implementation of logistic regression in R.
+
+```{r}
+help(College)
+tail(College)
+```
+
+First let's create an indicator variable for the Private variable:
+```{r}
+mutate(College,Pri = as.numeric(Private=="Yes"))%>%select(-c("Private"))->Col1
+```
+
+
+We'll split our data into a training and testing set using the sample.split function in the caTOols package. 
+```{r}
+set.seed(1)
+sample.split(Y=Col1$Pri,SplitRatio=0.8)->Col1_split
+Col1_train2<-Col1[Col1_split==T,]
+Col1_test2<-Col1[Col1_split==F,]
+
+dim(Col1_train2)
+dim(Col1_test2)
+
+#Compare proportion of Private schools in each sample
+cat("Original Proportion =",mean(Col1$Pri),"  Train Proportion =",mean(Col1_train2$Pri),"  Test Proportion =",mean(Col1_test2$Pri))
+```
+
+```{r}
+createDataPartition(y=Col1$Pri,p=0.8,list=F)->trndx
+
+prop.table(table(x=Col1$Pri))
+
+prop.table(table(x=Col1$Pri[trndx]))
+
+prop.table(table(x=Col1$Pri[-trndx]))
+
+```
+
+##Logistic Regression
+
+Logistic regression is the go-to method for prediction of a binary target variable. This is because it fits nicely in the context of classical inferential statistics, and has parameters that can be readily interpreted.
+
+
+```{r}
+glm(data=Col1_train, Pri~.,family=binomial)->Col1.fit
+glm(data=Col1_train, Pri~Apps+F.Undergrad+Outstate+Books+perc.alumni,family=binomial)->Col1.fit2
+
+summary(Col1.fit)
+summary(Col1.fit2)
+
+Col1.fit2$coefficients[2]
+```
+
+Probit Regression
+
+```{r}
+glm(data=Col1_train, Pri~.,family=gaussian)->Col1.fit_g
+summary(Col1.fit_g)
+```
+
+To check the performance of our classifiers, we can create a confusion matrix:
+
+```{r}
+confusionMatrix(as.factor(Col1_test$Pri) ,as.factor(1*(predict(Col1.fit_g,Col1_test)>0.5)))
+
+```
+3) **Compare the above results with the cutoff obtained from the observed proportion.**
+
+4) **Follow the modelling provess from Kuhn and Johnson using 10-fold cross validation for this logistic model.**
+
+We can see that the accuracy of this method is higher than the value we would get if we selected the majority class (1) for all observation. 
+
+##HOMEWORK##
+On it's way...

@@ -1,0 +1,175 @@
+---
+title: "STAT 510 Lectures 7-8"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+This first chunk of code sets the "working directory" as the folder where you have downloaded the "KutnerData" folder. Replace the path between the 'apostrophes' with the path on your device. Then press the green "play" button to run it.
+
+```{r, setup, include=FALSE}
+knitr::opts_knit$set(root.dir = '/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Chapter  6 Data Sets/')
+```
+
+
+Now, to import the data into R for analysis, we will use the **readr** package. Since it is not activated by default, we need to run the *library* command:
+
+```{r}
+library(readr)
+```
+
+Let's continue to work with Exercise 6.18
+
+```{r}
+CH06PR18 <- read_table("CH06PR18.txt", col_names = FALSE)    #This code imports the data
+
+y<-CH06PR18$X1      #This code renames the variables
+x1<-CH06PR18$X2
+x2<-CH06PR18$X3
+x3<-CH06PR18$X4
+x4<-CH06PR18$X5
+
+fit6.18<-lm(y~x1+x2+x3+x4)
+```
+
+By now you've noticed that we tend to run the same analysis on different data sets. One way to optimize our code is to make it reproducible. That means alot of things, one of which is the folowing. If I can just change a few variable assignments at the top level of my code to indicate the dat aand problem I'm working on, and then have the analysis flow automatically.
+
+```{r}
+data<-CH06PR18
+fit<-fit6.18
+```
+
+
+**The Big Picture**
+*Model Summary*
+Model summary with parameter estimates, standard errors, test statistics, p-values and more
+
+```{r}
+summary(fit)
+```
+
+*Anova Table*
+```{r}
+anova(fit)
+```
+
+
+*Parameter Estimation*
+In addition to the point estimates from the summary output above, we can determine confidence intervals for each beta:
+```{r}
+cl<-0.98
+confint(fit,level=cl)
+```
+
+Let's verify. This will also be useful for creating confidence bands.
+
+```{r}
+#Degrees of freedom is n-p. These are the dimensions of the data frame, so let's use that for our advantage.
+n<-dim(data)[1]
+p<-dim(data)[2]
+
+df<-n-p
+
+#The design matrix 
+X<-model.matrix(fit)
+A<-solve(t(X)%*%X)
+
+#The intercept term is coefficient 1, the coefficient of x1 is coefficient 2, etc. The ind, or index parameter will keep track of that.
+
+ind<-2
+
+v<-A[ind,ind]
+MSE<-sum(fit$residuals^2)/df
+
+a<-(1-cl)/2
+print("Lower limit")
+fit$coefficients[ind]-qt(a,df,lower.tail=F)*(v*MSE)^.5
+print("Upper limit")
+fit$coefficients[ind]+qt(a,df,lower.tail=F)*(v*MSE)^.5
+```
+
+
+Confidence intervals for mean response and prediction intervals for future independent responses.
+
+```{r}
+#Create a data frame with new explanatory values. The example below are from the 2nd observation
+newdata<-data.frame(x1=14,x2=8.19,x3=0.27,x4=104079)
+print("Fitted value, lower and upper bounds for confidence interval")
+predict(fit,newdata,interval="confidence",level = .99)
+
+#The two rows of out correspond to x=2 and x=4 respectively
+
+print("Fitted value, lower and upper bounds for prediction interval")
+predict(fit,newdata,interval="predict",level = .99)
+
+```
+
+
+Let's verify
+```{r}
+x1=14
+x2=8.19
+x3=0.27
+x4=104079
+
+xhv<-c(x1,x2,x3,x4)
+xh<-matrix(c(1,xhv))
+
+cl<-0.99      #Confidence Level
+
+yh<-t(xh)%*%as.matrix(fit$coefficients)
+
+MSE<-sum(fit$residuals^2)/df
+A<-solve(t(X)%*%X)
+sy<-as.numeric(t(xh)%*%A%*%xh)
+
+a<-(1-cl)/2
+print("Lower limit")
+yh-qt(a,df,lower.tail=F)*(sy*MSE)^.5
+print("Upper limit")
+yh+qt(a,df,lower.tail=F)*(sy*MSE)^.5
+```
+
+
+Confidence REGION
+```{r}
+clb<-0.95      #Confidence Level
+
+ind<-2
+
+v<-A[ind,ind]
+MSE<-sum(fit$residuals^2)/df
+A<-solve(t(X)%*%X)
+H<-X%*%A%*%t(X)
+ 
+h<-H[ind,ind]
+
+WW<-p*qf(clb,p,n-p)
+W<-WW^.5
+
+print("Lower limit")
+fit$fitted.values[ind]-W*(h*MSE)^.5
+print("Upper limit")
+fit$fitted.values[ind]+W*(h*MSE)^.5
+```
+
+**Correlation Stats**
+
+```{r}
+#Correlation matrix
+cor(data)
+
+#Scatterplot matrix
+pairs(data)
+```
+
+
+
+
+
+
+
+
+
+
+

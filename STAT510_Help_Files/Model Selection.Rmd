@@ -1,0 +1,45 @@
+---
+title: "Model Specification"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(olsrr)
+```
+
+An example of why $R^2$ is not an ideal criterion.
+```{r}
+pf<-data.frame(x=c(1,3),y=c(1,5))
+summary(lm(y~x,data=pf))
+plot(pf)
+```
+
+
+Import data from Exercise 9.10: Job Proficiency
+```{r}
+jp <- read_table2("/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Chapter  9 Data Sets/CH09PR10.txt", col_names = c("y","x1","x2","x3","x4"))
+
+fit.jp<-lm(y~.,data=jp)  #full model
+summary(fit.jp)
+```
+
+
+All possible Regressions
+```{r}
+olsrr::ols_step_all_possible(fit.jp)
+plot(ols_step_all_possible(fit.jp))
+```
+
+Best Subset Regression, Corner Principle
+```{r}
+ols_step_best_subset(fit.jp)
+plot(ols_step_best_subset(fit.jp))
+```
+
+To isolate one criterion for a better view:
+```{r}
+ols_step_best_subset(fit.jp)$cp #Cp values. See documentation for others
+plot(ols_step_best_subset(fit.jp)$cp,type="l") #plot
+```
+

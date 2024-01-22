@@ -1,0 +1,32 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+sales <- read_csv("/Volumes/5ive3rds/CSULB/Classes/510/Data/ASCII-comma/Chapter 04/sales.txt")
+
+fit<-lm(Y~X1+X2+X3+X4,data = sales)
+```
+
+```{r}
+summary(fit)
+```
+
+```{r}
+anova(lm(Y~X1+X2+X3,data = sales),lm(Y~X1+X2+X3+X4,data = sales))
+```
+```{r}
+anova(lm(Y~X1+X2,data = sales),lm(Y~X1+X2+X3+X4,data = sales))
+```
+
+
+```{r}
+sales1<-sales
+sales1$X5<-sales$X1+sales$X2
+```
+
+```{r}
+anova(lm(Y~X5+X3+X4,data = sales1),lm(Y~X1+X2+X3+X4,data = sales1))
+```

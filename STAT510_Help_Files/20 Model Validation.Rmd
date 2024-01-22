@@ -1,0 +1,74 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+library(car)
+library(MASS)
+library(corrplot)
+library(olsrr)
+library(caret)
+library(ROCit)
+library(HH)
+```
+
+The dataset stop gives the stopping distances in feet (y) for cars traveling at the indicated speed in mph (x1), and wind resistance in mph (x2).**
+
+```{r}
+stop <- read_table2("/Volumes/5ive3rds/CSULB/Classes/510/Quiz/S22/Q3/stop.txt")
+
+```
+
+```{r}
+dim(stop)
+```
+
+To remove the obvious outlier within R, we can use the subtraction symbol:
+```{r}
+stop1<-stop[-60,]
+```
+
+
+```{r}
+dim(stop1)
+n<-dim(stop1)[1]
+```
+
+The model that has the best predictive value is the one with only $x_1$. So let's use that for validation. To create an 80%-20% split, let's randomly sample the data:
+
+Determine the size of the build set
+```{r}
+m<-round(.8*n) #build set size
+m
+ind<-sample(seq(1,n,1),m)
+```
+
+Subset the data into train and test sets.
+```{r}
+stop1_build<-stop1[ind,]
+stop1_validate<-stop1[-ind,]
+```
+
+**Validation through comparing models (I.A)**
+```{r}
+fit.stopb<-lm(y~x1,data=stop1_build)
+summary(fit.stopb)
+fit.stopv<-lm(y~x1,data=stop1_validate)
+summary(fit.stopv)
+
+```
+
+**Validation through comparing error criterion (I.B)**
+```{r}
+#Mean Square Error
+sum((fit.stopb$residuals)^2)/(m-2)
+#Mean Square Prediction Error
+sum((stop1_validate$y-predict(fit.stopb,newdata=stop1_validate))^2)/(n-m)
+```
+
+
+
+
+

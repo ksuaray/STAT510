@@ -1,0 +1,50 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+```
+
+SIMPLE LINEAR REGRESSION: Exercise 14.7
+Import Annual Dues data and rename variables
+```{r}
+ad<- read_table2("/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Chapter 14 Data Sets/CH14PR07.txt", 
+    col_names = FALSE)
+names(ad)<-c("y","x")
+View(ad)
+```
+
+Run logistic regression summary
+```{r}
+fit.ad<-glm(y~x,family=binomial,data=ad)
+summary(fit.ad)
+```
+
+Analysis of Deviance Table
+```{r}
+anova(fit.ad)
+```
+
+
+MULTIPLE LINEAR REGRESSION: Exercise 14.13
+Import Car Purchase data and rename variables
+```{r}
+crp<- read_table2("/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Chapter 14 Data Sets/CH14PR13.txt", 
+    col_names = FALSE)
+names(crp)<-c("y","x1","x2")
+View(crp)
+```
+
+Run logistic regression summary
+```{r}
+fit.crp<-glm(y~x1+x2,family=binomial,data=crp)
+summary(fit.crp)
+```
+
+Analysis of Deviance Table
+```{r}
+anova(fit.crp)
+```
+

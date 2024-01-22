@@ -1,0 +1,114 @@
+---
+title: "Model Checking 3"
+output: html_notebook
+---
+
+```{r}
+install.packages("olsrr")
+install.packages("caret")
+install.packages("ROCit")
+library(readr)
+library(olsrr)
+library(caret)
+library(ROCit)
+```
+
+Let's create a data set to explore the impact of outliers
+```{r}
+set.seed(22)
+xo1<-c(seq(1,2,0.1))
+eo<-rnorm(length(xo1),mean=0,sd=0.1)
+yo1<-1.5*xo1+2+eo
+
+fit1<-lm(yo1~xo1)
+summary(fit1)
+#plot(lm(yo1~xo1))
+plot(xo1,yo1)
+abline(a=fit1$coefficients[1],b=fit1$coefficients[2])
+```
+
+Now let's include a 12th point with high leverage but low influence
+```{r}
+xnew11<-4
+xo11<-c(xo1,xnew11)
+yo11<-c(yo1,1.5*xnew11+2)
+
+fit11<-lm(yo11~xo11)
+summary(fit11)
+#plot(lm(yo11~xo11))
+plot(xo11,yo11)
+abline(a=fit11$coefficients[1],b=fit11$coefficients[2])
+
+```
+
+In contrast, let's include a high leverage, high influence point:
+```{r}
+xnew12<-4
+xo12<-c(xo1,xnew11)
+yo12<-c(yo1,-1.5*xnew11+2)
+
+fit12<-lm(yo12~xo12)
+summary(fit12)
+#plot(lm(yo12~xo12))
+plot(xo12,yo12)
+abline(a=fit12$coefficients[1],b=fit12$coefficients[2])
+
+```
+
+To check leverage, let's consider DFFITS, DFBETAS and Cook's D
+```{r}
+ols_plot_dffits(fit11)
+ols_plot_dfbetas(fit11)
+ols_plot_cooksd_chart(fit11)
+qf(0.5,2,10)
+```
+
+```{r}
+ols_plot_dffits(fit12)
+ols_plot_dfbetas(fit12)
+ols_plot_cooksd_chart(fit12)
+qf(0.5,2,10)
+```
+
+LOGISTIC DIAGNOSTICS
+
+```{r}
+cp <- read_table2("/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Chapter 14 Data Sets/CH14PR13.txt", col_names = FALSE)
+
+names(cp)<-c("y","x1","x2")
+```
+
+```{r}
+fitcp<-glm(y~x1+x2,family=binomial,data=cp)
+summary(fitcp)
+```
+```{r}
+pi_hat<-fitcp$fitted.values
+cp_p<-cbind(pi_hat,cp)
+```
+
+Generating class predictions based on a given cutoff
+```{r}
+pc<-0.5  #probability cutoff
+cp_yhat<-as.factor(1*(pi_hat>pc))  #Class predictions
+yf<-as.factor(cp$y)  #Actual data
+cp_y<-data.frame(yhat=cp_yhat,y=yf)
+```
+
+Confusion matrix
+```{r}
+caret::confusionMatrix(cp_yhat,yf,positive="1")
+```
+
+ROC curve
+```{r}
+ROCit_obj <- ROCit::rocit(score=as.numeric(cp_yhat),class=cp$y)
+plot(ROCit_obj)
+```
+To obtain the AUC and optimal cutpoint:
+```{r}
+ROCit_obj$AUC
+
+cutpointr::cutpointr(cp_p,pi_hat,y)
+```
+

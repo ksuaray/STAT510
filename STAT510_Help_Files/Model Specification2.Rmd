@@ -1,0 +1,79 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+library(tidyverse)
+
+mm<- read_table2("/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Chapter  1 Data Sets/CH01PR27.txt", 
+    col_names = FALSE)
+
+names(mm)<-c("ym","xm")
+```
+
+
+Rough and ready degree selection
+
+```{r}
+
+k<-4 #increase k incrementally until most recently added varaible not significant
+summary(lm(ym~poly(xm,k)))
+```
+
+MODELLING INTERACTION EFFECTS
+
+```{r}
+#install.packages(c("jtools","interactions"))
+library(jtools)
+library(interactions)
+```
+
+
+```{r}
+bp<- read_table2("/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Chapter  6 Data Sets/CH06PR05.txt", 
+     col_names = c("y","x1","x2"))
+
+```
+
+```{r}
+fit_bp<-lm(y~x1+x2+x1*x2,data=bp)
+summary(fit_bp)
+```
+
+```{r}
+summ(fit_bp)
+```
+
+```{r}
+interact_plot(fit_bp,pred=x1,modx=x2)
+```
+
+QUALITATIVE PREDICTORS
+```{r}
+av<- read_table2("/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Chapter  8 Data Sets/CH08PR24.txt", 
+    col_names = c("y","x1","x2"))
+```
+
+```{r}
+fit_av<-lm(y~x1+x2,data=av)
+summary(fit_av)
+```
+
+```{r}
+av0<-av[which(av$x2==0),]
+plot(av0$x1,av0$y)
+summary(lm(y~x1,data=av0))
+
+```
+
+```{r}
+av1<-av[which(av$x2==1),]
+plot(av1$x1,av1$y)
+summary(lm(y~x1,data=av1))
+```
+```{r}
+ggplot(data=av,aes(x1,y)) + geom_point()
+```
+

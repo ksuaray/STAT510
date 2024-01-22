@@ -1,0 +1,94 @@
+---
+title: "Model Checking 2"
+output: html_notebook
+---
+
+II. Assumptions on Error Violated
+Brown-Forsythe Test (3.6)
+
+
+```{r}
+install.packages("MASS")
+install.packages("HH")
+```
+
+```{r}
+library(MASS)
+library(HH)
+```
+
+EXAMPLE 1: 6.10 - Grocery Retailer
+```{r}
+gr <- read_table2("/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Chapter  6 Data Sets/CH06PR09.txt", col_names = FALSE)
+names(gr)<-c("y","x1","x2","x3")
+```
+
+```{r}
+fitg<-lm(y~x1+x2+x3,data=gr)
+plot(fitg)
+```
+
+Let's first use the "eye test" to determine our split point based on residual plot.
+
+Next, we need to group our data based on this
+
+```{r}
+yc<-4600
+
+indc<-as.factor(c(fitg$fitted.values>yc)) #extremely critical that we define this indicator as a FACTOR, otherwise code won't run!
+
+#indm<-as.factor(c(fitg$fitted.values>median(fitg$fitted.values)))
+
+gra<-cbind(gr,indc,fitg$fitted.values)
+gra[indc==T,]
+```
+
+Perform the test
+```{r}
+HH::hovBF(y~indc,data=gra)
+```
+
+
+Box-Cox Transformation
+
+Let's use this for the Market data set
+```{r}
+market <- read_csv("/Volumes/5ive3rds/CSULB/Classes/510/Data/ASCII-comma/Chapter 07/market.txt")
+
+fit1<-lm(Y1~X1+X2+X3+X4, data=market)
+```
+
+
+
+```{r}
+MASS::boxcox(fit1)
+```
+There should be a visible maximum if the algorithm converges. to see it, we may need to adjust our viewing window of $\lambda$ values:
+```{r}
+boxcox(fit1,lambda = seq(-10, 2, 1/10))
+```
+
+```{r}
+boxcox(fit1,lambda = seq(-15, 2, 1/10))
+```
+
+Now we can compare and contrast the fit summary  before and after the transformation:
+```{r}
+summary(lm(Y1~X1+X2+X3+X4, data=market))
+```
+
+```{r}
+summary(lm(Y1^-4~X1+X2+X3+X4, data=market))
+```
+
+For the Grocery retailer data, even though the BF test indicated homoscedasticity, it will be instructive to see how the p-value of the test changes as a result:
+
+```{r}
+boxcox(fitg,lambda = seq(-2, 10, 1/10))
+```
+This indicates 4 is a convenient value for $\lambda$ 
+```{r}
+hovBF(y~indc,data=gra)
+hovBF(y^4~indc,data=gra)
+```
+

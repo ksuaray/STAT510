@@ -1,0 +1,68 @@
+---
+title: "STAT 510 Lectures 3-4"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+This first chunk of code sets the "working directory" as the folder where you have downloaded the "KutnerData" folder. Replace the path between the 'apostrophes' with the path on your device. Then press the green "play" button to run it.
+
+```{r, setup, include=FALSE}
+knitr::opts_knit$set(root.dir = '/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Appendix C Data Sets/')
+```
+
+
+Now, to import the data into R for analysis, we will use the **readr** package. Since it is not activated by default, we need to run the *library* command:
+```{r}
+library(readr)
+```
+
+Let's start things out with Exercise 1.21
+```{r}
+APPENC01 <- read_table("APPENC01.txt", col_names = FALSE)    #This code imports the data
+
+y<-APPENC01$X2      #Length of Hospital Stay
+X4<-APPENC01$X4     #Infecton Risk
+X12<-APPENC01$X12     #Available Facilities and Services
+X6<-APPENC01$X6     #Routine chest X-Ray Ratio
+X9<-APPENC01$X9     #Region
+
+```
+Alternatively
+```{r}
+APPENC01 <- read_table("APPENC01.txt", col_names = FALSE)    #This code imports the data
+
+names(APPENC01)[2]<-"y"
+head(APPENC01)
+
+attach(APPENC01)
+```
+
+```{r}
+lm(y~X4) #fit
+#plot
+#MSE
+```
+
+```{r}
+lm(y~X12) #fit
+#plot
+#MSE
+```
+
+
+```{r}
+lm(y~X6) #fit
+#plot
+#MSE
+```
+
+```{r}
+region<-1
+Ar<-APPENC01[X9==region,]
+
+lm(y~X4,data=Ar) #fit
+#plot
+#MSE
+```
+
