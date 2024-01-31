@@ -1,0 +1,62 @@
+---
+title: "Simple LR with Plot"
+format: html
+jupyter: ir
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{R}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{R}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+```{r, setup, include=FALSE}
+knitr::opts_knit$set(root.dir = '/Users/kagbasuaray/Desktop/CSULB/Classes/510/STAT510_Code/KutnerData/Chapter  1 Data Sets')
+```
+
+```{r}
+library(readr)
+```
+
+```{r}
+CH01PR21 <- read_table("CH01PR21.txt", col_names = FALSE)    #This code imports the data
+
+```
+
+```{R}
+df<-CH01PR21
+response<-CH01PR21$X1
+explanatory<-CH01PR21$X2
+
+
+#Fit the model
+simpleLR_fit = lm(response~explanatory,data=df)
+print(summary(simpleLR_fit))
+
+# Create the scatterplot with a line of best fit
+scatter_plot <- plot_ly(data=df, x = ~explanatory, y = ~response, mode = "markers", type = "scatter", name = "Data") %>%  
+
+    add_trace(mode = "lines", type = "scatter", line = list(color = "red"), y = lm(response~explanatory,data=df)$fitted.values, name = "Line of Best Fit") %>%
+  layout(title = "Scatterplot with Line of Best Fit",
+         xaxis = list(title = "X-Axis Label"),
+         yaxis = list(title = "Y-Axis Label"))
+
+# Print the plot
+print(scatter_plot)
+
+```

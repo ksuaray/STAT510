@@ -1,0 +1,125 @@
+---
+title: "HW1"
+format: html
+jupyter: ir
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{R}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{R}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+```{R}
+library(readr)
+```
+
+```{R}
+gpi <- read_delim("SP24Data/GPI_and_Secular_Values.tab", 
+    delim = "\t", escape_double = FALSE, 
+    col_types = cols(GNI = col_double()), 
+    trim_ws = TRUE)
+View(GPI_and_Secular_Values)
+```
+
+```{R}
+library(dplyr)
+```
+
+```{R}
+gpi16 <- filter(gpi,Year==2016)
+gpi16
+```
+
+```{R}
+library(plotly)
+```
+
+```{R}
+# Create the scatter plot 
+scatter_plot <- plot_ly(data=gpi16, x = ~dogint, y = ~GPI, mode = "markers", type = "scatter",trendline = "ols", name = "Data") 
+
+layout(title = "Scatterplot with Line of Best Fit")
+
+# Print the plot
+print(scatter_plot)
+```
+
+```{R}
+#Fit the model
+gpi16_fit = lm(GPI~dogint,data=gpi16)
+summary(gpi16_fit)
+```
+
+```{R}
+# Create the scatterplot with a line of best fit
+scatter_plot <- plot_ly(data=gpi16, x = ~dogint, y = ~GPI, mode = "markers", type = "scatter", name = "Data") %>%  
+
+    add_trace(mode = "lines", type = "scatter", line = list(color = "red"), y = lm(GPI~dogint,data=gpi16)$fitted.values, name = "Line of Best Fit") %>%
+  layout(title = "Scatterplot with Line of Best Fit")
+
+# Print the plot
+print(scatter_plot)
+```
+
+```{R}
+#Fit the model
+gpilog16_fit = lm(GPIlog~dogint,data=gpi16)
+summary(gpilog16_fit)
+```
+
+```{R}
+# Create the scatterplot with a line of best fit
+scatter_plot <- plot_ly(data=gpi16, x = ~dogint, y = ~GPIlog, mode = "markers", type = "scatter", name = "Data") %>%  
+
+    add_trace(mode = "lines", type = "scatter", line = list(color = "red"), y = lm(GPIlog~dogint,data=gpi16)$fitted.values, name = "Line of Best Fit") %>%
+  layout(title = "Scatterplot with Line of Best Fit")
+
+# Print the plot
+print(scatter_plot)
+```
+
+Towards reproducibility
+
+```{R}
+df<-gpi16
+response<-df$GPIlog
+explanatory<-df$dogint
+
+
+#Fit the model
+simpleLR_fit = lm(response~explanatory,data=df)
+print(summary(simpleLR_fit))
+
+# Create the scatterplot with a line of best fit
+scatter_plot <- plot_ly(data=df, x = ~explanatory, y = ~response, mode = "markers", type = "scatter", name = "Data") %>%  
+
+    add_trace(mode = "lines", type = "scatter", line = list(color = "red"), y = lm(response~explanatory,data=df)$fitted.values, name = "Line of Best Fit") %>%
+  layout(title = "Scatterplot with Line of Best Fit",
+         xaxis = list(title = "X-Axis Label"),
+         yaxis = list(title = "Y-Axis Label"))
+
+# Print the plot
+print(scatter_plot)
+
+
+```
+
+Translate to Python
+
+Can us e CodeLingo: [**https://analytica.shinyapps.io/codelingo**](https://analytica.shinyapps.io/codelingo/ "CodeLingo")
