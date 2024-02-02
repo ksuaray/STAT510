@@ -1,0 +1,45 @@
+---
+title: "Test"
+format: html
+jupyter: ir
+---
+
+## Python and R in same Notebook
+
+```{R}
+df = data.frame(x1=rexp(40),x2=rgamma(40,shape=0.5),y=rnorm(40))
+```
+
+```{R}
+summary(lm(y~x1+x2,data=df))
+```
+
+```{python}
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+
+```
+
+```{python}
+x1 = np.random.exponential(size=40)
+x2 = np.random.gamma(size=40,shape=0.5)
+y = np.random.normal(size=40)
+
+
+```
+
+```{python}
+df = pd.DataFrame({'x1':x1,'x2':x2,'y':y})
+print(df)
+```
+
+```{python}
+X = sm.add_constant(df[['x1','x2']])
+```
+
+```{python}
+model = sm.OLS(y,X)
+results = model.fit()
+print(results.summary())
+```
