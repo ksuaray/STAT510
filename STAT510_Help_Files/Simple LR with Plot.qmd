@@ -25,26 +25,51 @@ You can add options to executable code like this
 
 The `echo: false` option disables the printing of code (only output is displayed).
 
-```{r, setup, include=FALSE}
-knitr::opts_knit$set(root.dir = '/Users/kagbasuaray/Desktop/CSULB/Classes/510/STAT510_Code/KutnerData/Chapter  1 Data Sets')
+# Simple Linear Regression in R
+
+To proceed with the analysis, we'll need to read the data into R first. R comes with alot of functionality out the box, but often we'll need to download a crowdsourced *package* to make the analysis more user-friendly or get better visuals.
+
+Let's import the *readr* package so that we can read in our data, *dplyr* to manipulate it, and *plotly* to visualize it. We only need to do this one time, and the package will then be stored on our device.
+
+```{r}
+install.packages("readr")
+install.packages("dplyr")
+install.packages("plotly")
 ```
+
+Once installed, we just need to make sure it is loaded using the *library* command:
 
 ```{r}
 library(readr)
+library(dplyr)
+library(plotly)
 ```
+
+The following command sets the "root directory", i.e. where I'll be pulling data from. It is not necessary, it just saves us from typing the entire file pate later.
+
+```{r, setup, include=FALSE}
+knitr::opts_knit$set(root.dir = '/Users/kagbasuaray/Desktop/CSULB/Classes/510/STAT510_Code/KutnerData/Chapter  1 Data Sets')
+
+```
+
+Now let's upload the data from our desktop and call it CH01PR21:
 
 ```{r}
 CH01PR21 <- read_table("CH01PR21.txt", col_names = FALSE)    #This code imports the data
 
 ```
 
+The following code executes a simple linear regression analysis from model fitting fo anova output to interactive scatterplot with line of best fit. See comments below.
+
 ```{R}
+# These first three lines make the code reproducible. You just need to assign the data frame, response and explanatory variables, and hit play
+
 df<-CH01PR21
 response<-CH01PR21$X1
 explanatory<-CH01PR21$X2
 
 
-#Fit the model
+# Fit the model
 simpleLR_fit = lm(response~explanatory,data=df)
 print(summary(simpleLR_fit))
 
