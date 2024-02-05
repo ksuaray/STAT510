@@ -67,10 +67,41 @@ summary(fit1.21)
 Confidence band
 
 ```{r}
+pf121 = as.data.frame(predict(fit1.21,newdata,interval="confidence",level = .99))
+pf121
+```
+
+```{r}
+n<-dim(CH01PR21)[1]
+alpha<-0.01
+xh<-2
+W<-(2*qf(1-alpha,2,n-2))^0.5
+MSE<-sum(fit1.21$residuals^2)/(n-2)
+kxx<-sum((x-mean(x))^2)
+
 print("Lower limit")
-fit1.21$coefficients[2]-qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5
+pf121$fit[1]-W*(MSE*(1/n+(xh-mean(x))/kxx))^.5
+
 print("Upper limit")
-fit1.21$coefficients[2]+qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5
+pf121$fit[1]+W*(MSE*(1/n+(xh-mean(x))/kxx))^.5
+```
+
+```{r}
+n<-dim(CH01PR21)[1]
+alpha<-0.01
+xh<-4
+W<-(2*qf(1-alpha,2,n-2))^0.5
+MSE<-sum(fit1.21$residuals^2)/(n-2)
+kxx<-sum((x-mean(x))^2)
+
+print("Lower limit")
+pf121$fit[]-W*(MSE*(1/n+(xh-mean(x))/kxx))^.5
+
+print("Upper limit")
+pf121$fit[1]+W*(MSE*(1/n+(xh-mean(x))/kxx))^.5
+
+(MSE*(1/n+(xh-mean(x))/kxx))
+
 ```
 
 Anova table
