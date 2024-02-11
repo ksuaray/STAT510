@@ -37,7 +37,7 @@ summary(fit1.21)
 Parameter Estimation Exercise 2.6a
 
 ```{r}
-confint(fit1.21)
+confint(fit1.21,level=0.95)
 ```
 
 Let's verify
@@ -47,6 +47,8 @@ print("Lower limit")
 fit1.21$coefficients[2]-qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5
 print("Upper limit")
 fit1.21$coefficients[2]+qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5
+
+fit1.21$residuals
 ```
 
 Confidence intervals for mean response and prediction intervals for future independent responses. Exercise 2.15ab
@@ -80,10 +82,10 @@ MSE<-sum(fit1.21$residuals^2)/(n-2)
 kxx<-sum((x-mean(x))^2)
 
 print("Lower limit")
-pf121$fit[1]-W*(MSE*(1/n+(xh-mean(x))/kxx))^.5
+pf121$fit[1]-W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
 
 print("Upper limit")
-pf121$fit[1]+W*(MSE*(1/n+(xh-mean(x))/kxx))^.5
+pf121$fit[1]+W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
 ```
 
 ```{r}
@@ -95,12 +97,12 @@ MSE<-sum(fit1.21$residuals^2)/(n-2)
 kxx<-sum((x-mean(x))^2)
 
 print("Lower limit")
-pf121$fit[]-W*(MSE*(1/n+(xh-mean(x))/kxx))^.5
+pf121$fit[2]-W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
 
 print("Upper limit")
-pf121$fit[1]+W*(MSE*(1/n+(xh-mean(x))/kxx))^.5
+pf121$fit[2]+W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
 
-(MSE*(1/n+(xh-mean(x))/kxx))
+(MSE*(1/n+(xh-mean(x))^2/kxx))
 
 ```
 
