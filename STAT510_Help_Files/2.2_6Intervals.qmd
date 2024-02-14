@@ -69,7 +69,7 @@ summary(fit1.21)
 Confidence band
 
 ```{r}
-pf121 = as.data.frame(predict(fit1.21,newdata,interval="confidence",level = .99))
+pf121 = predict(fit1.21,newdata)
 pf121
 ```
 
@@ -82,10 +82,10 @@ MSE<-sum(fit1.21$residuals^2)/(n-2)
 kxx<-sum((x-mean(x))^2)
 
 print("Lower limit")
-pf121$fit[1]-W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
+pf121[1]-W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
 
 print("Upper limit")
-pf121$fit[1]+W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
+pf121[1]+W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
 ```
 
 ```{r}
@@ -97,10 +97,10 @@ MSE<-sum(fit1.21$residuals^2)/(n-2)
 kxx<-sum((x-mean(x))^2)
 
 print("Lower limit")
-pf121$fit[2]-W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
+pf121[2]-W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
 
 print("Upper limit")
-pf121$fit[2]+W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
+pf121[2]+W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
 
 (MSE*(1/n+(xh-mean(x))^2/kxx))
 

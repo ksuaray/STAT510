@@ -1,0 +1,207 @@
+---
+title: "STAT 510 HW1 Sp24"
+format: html
+jupyter: ir
+---
+
+HW1
+
+1.7, 1.20,1.24, 1.33,2.5, 2.14
+
+```{r}
+library(readr)
+library(dplyr)
+library(plotly)
+```
+
+```{r, setup, include=FALSE}
+knitr::opts_knit$set(root.dir = '/Users/kagbasuaray/Desktop/CSULB/Classes/510/STAT510_Code/KutnerData/Chapter 1 Data Sets')
+```
+
+#1.7
+
+![](images/clipboard-1149071201.png)
+
+a\. The probability cannot be found because there is no distribution associated with $Y$.
+
+b\. In this context, $Y\sim N(\beta_0+\beta_1 x,\sigma^2)$, i.e. $Y\sim N(200,25)$ thus $P(195<Y<205) = P(\frac{195-200}{5}<\frac{Y-\mu}{\sigma}<\frac{205-200}{5})=P(-1<Y<1)=$
+
+```{r}
+pnorm(1)-pnorm(-1)
+```
+
+#1.20
+
+![](images/clipboard-3650765180.png)
+
+![](images/clipboard-1702799500.png)
+
+```{r}
+CH01PR20 <- read_table("CH01PR20.txt", col_names = FALSE)    #This code imports the data
+```
+
+```{r}
+df<-CH01PR20
+response<-CH01PR20$X1
+explanatory<-CH01PR20$X2
+
+
+# Fit the model
+simpleLR_fit = lm(response~explanatory)
+print(summary(simpleLR_fit))
+
+# Create the scatterplot with a line of best fit
+scatter_plot <- plot_ly(data=df, x = ~explanatory, y = ~response, mode = "markers", type = "scatter", name = "Data") %>%  
+
+    add_trace(mode = "lines", type = "scatter", line = list(color = "red"), y = lm(response~explanatory,data=df)$fitted.values, name = "Line of Best Fit") %>%
+  layout(title = "Scatterplot with Line of Best Fit",
+         xaxis = list(title = "X-Axis Label"),
+         yaxis = list(title = "Y-Axis Label"))
+
+# Print the plot
+print(scatter_plot)
+
+```
+
+The regression function seems to fit the data well.
+
+![](images/clipboard-2957343199.png)
+
+We expect a total of -0.5802 minutes of service for a service person that fixed 0 copy machines. This does not make sense.
+
+![](images/clipboard-4293285359.png){width="417" height="18"}
+
+$\mu_h = 15.0352*5-0.5802 =$
+
+```{r}
+15.0352*5-0.5802
+```
+
+#1.24
+
+![](images/clipboard-195297371.png)
+
+```{r}
+simpleLR_fit$residuals
+sum((simpleLR_fit$residuals)^2) #The sum of squared residuals minimizes $Q$.
+```
+
+![](images/clipboard-4026278483.png){width="332" height="21"}
+
+The point estimate for $\sigma^2$ is $MSE=\frac{\sum e_i^2}{n-2}$ which can be found as follows:
+
+```{r}
+sum((simpleLR_fit$residuals)^2)/(dim(df)[1]-2)
+```
+
+$\sigma$ is in the units of $y$, minutes.
+
+#1.33
+
+![](images/clipboard-983851142.png)
+
+We want to minimize
+
+$S(\beta_0)=\sum_{i=1}^n (y_i-\beta_0)^2$ .
+
+Taking the derivative with respect to $\beta_0$ and seting equal to 0, we get
+
+$S'(\beta_0)=2\sum_{i=1}^n (y_i-\beta_0)=0$ .
+
+Thus
+
+\\sum\_{i=1}\^n y_i-n\\beta_0
+
+and $b_0=\bar{y}$.
+
+#2.5
+
+![](images/clipboard-995627813.png)
+
+```{r}
+confint(simpleLR_fit,level=0.90)
+```
+
+We are 90% confident that the true slope that characterizes the relationship between number of copiers serviced and mean service time is between 14.22 and 15.85.
+
+![](images/clipboard-4093707822.png)
+
+As usual, our test is $H_0:\beta_1=0$ vs $H_1:\beta_1\neq 0$. We will reject the null if our p-value is less than $\alpha=0.10$. The p-value above is $2*10^{-16}$. Thus we strongly reject the null.
+
+![](images/clipboard-3532793322.png){width="313"}
+
+Yes. The confidence interval does not contain 0, which matches rejecting the null.
+
+![](images/clipboard-888380898.png)
+
+Here our test is $H_0:\beta_1=14$ vs $H_1:\beta_1>14$. Our test statistic is $T=\frac{b_1-\beta_1,null}{s(b_1)}=$
+
+```{r}
+(15.0352-14)/0.4831
+```
+
+Thus the p-value is $P(T_{43}>2.142828)$
+
+```{r}
+pt(2.142828,df=43,lower.tail = F)
+```
+
+This value is less than $0.05$ so we reject $H_0$. This violates the manufacturer's claim.
+
+![](images/clipboard-3732187638.png)
+
+This could potentially be the case for a different set of data, but not in this case. Two facts in our linear model output are working against it. First of all, the value of $b_0$ is negative, which is not permitted for time. Next, the p-value for the hypothesis test $H_0:\beta_0=0$ vs $H_1:\beta_0\neq 0$ is 0.837, indicating results that are not significant.
+
+#2.14
+
+![](images/clipboard-2209018955.png)
+
+```{r}
+#Create a data frame with new explanatory values
+newdata<-data.frame(explanatory=c(6))
+print("Fitted value, lower and upper bounds for confidence interval")
+predict(simpleLR_fit,newdata,interval="confidence",level = .90)
+```
+
+![](images/clipboard-2860601440.png)
+
+```{r}
+#Create a data frame with new explanatory values
+newdata<-data.frame(explanatory=c(6))
+print("Fitted value, lower and upper bounds for confidence interval")
+predict(simpleLR_fit,newdata,interval="predict",level = .90)
+```
+
+Wider than a. on both sides, as they should be. Additive factor is about 13.
+
+![](images/clipboard-2310503734.png)
+
+Confidence interval from part a. was (87.28387,91.97880), for 6 copiers. To get the per-call times, we simply divide the limits by 6:
+
+```{r}
+c(87.28387,91.97880)/6
+```
+
+![](images/clipboard-3085724746.png)
+
+```{r}
+pf120 = predict(simpleLR_fit,newdata)
+pf120
+```
+
+```{r}
+n<-dim(df)[1]
+alpha<-0.1
+xh<-6
+W<-(2*qf(1-alpha,2,n-2))^0.5
+MSE<-sum(simpleLR_fit$residuals^2)/(n-2)
+kxx<-sum((explanatory-mean(explanatory))^2)
+
+print("Lower limit")
+pf120[1]-W*(MSE*(1/n+(xh-mean(explanatory))^2/kxx))^.5
+
+print("Upper limit")
+pf120[1]+W*(MSE*(1/n+(xh-mean(explanatory))^2/kxx))^.5
+```
+
+Wider than a. on both sides, as they should be. Additive factor is about 2.

@@ -1786,9 +1786,9 @@ statistics, p-values and more Exercise 2.6b</p>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuQ0gwMVBSMjEgPC0gcmVhZF90YWJsZShcIkNIMDFQUjIxLnR4dFwiLCBjb2xfbmFtZXMgPSBGQUxTRSkgICAgI1RoaXMgY29kZSBpbXBvcnRzIHRoZSBkYXRhXG5gYGAifQ== -->
 <pre class="r"><code>CH01PR21 &lt;- read_table(&quot;CH01PR21.txt&quot;, col_names = FALSE)    #This code imports the data</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG7ilIDilIAgQ29sdW1uIHNwZWNpZmljYXRpb24g4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAXG5jb2xzKFxuICBYMSA9IGNvbF9kb3VibGUoKSxcbiAgWDIgPSBjb2xfZG91YmxlKClcbilcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG7ilIDilIAgQ29sdW1uIHNwZWNpZmljYXRpb24g4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAXG5jb2xzKFxuICBYMSA9IGNvbF9kb3VibGUoKSxcbiAgWDIgPSBjb2xfZG91YmxlKClcbilcbiJ9 -->
 <pre><code>
-── Column specification ─────────────────────────────────────────────────────────────
+── Column specification ──────────────────────────────────────────────────────────
 cols(
   X1 = col_double(),
   X2 = col_double()
@@ -1833,8 +1833,8 @@ F-statistic: 72.73 on 1 and 8 DF,  p-value: 2.749e-05</code></pre>
 <p>Let’s verify</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uZmludChmaXQxLjIxKVxuYGBgIn0= -->
-<pre class="r"><code>confint(fit1.21)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uZmludChmaXQxLjIxLGxldmVsPTAuOTUpXG5gYGAifQ== -->
+<pre class="r"><code>confint(fit1.21,level=0.95)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICAgMi41ICUgICAgOTcuNSAlXG4oSW50ZXJjZXB0KSA4LjY3MDM3MCAxMS43Mjk2MzBcbnggICAgICAgICAgIDIuOTE4Mzg4ICA1LjA4MTYxMlxuIn0= -->
 <pre><code>               2.5 %    97.5 %
@@ -1872,6 +1872,13 @@ future independent responses. Exercise 2.15ab</p>
 <!-- rnb-output-begin eyJkYXRhIjoiICAgICAgIHggXG41LjA4MTYxMiBcbiJ9 -->
 <pre><code>       x 
 5.081612 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZml0MS4yMSRyZXNpZHVhbHNcbmBgYCJ9 -->
+<pre class="r"><code>fit1.21$residuals</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgMSAgICAyICAgIDMgICAgNCAgICA1ICAgIDYgICAgNyAgICA4ICAgIDkgICAxMCBcbiAxLjggLTEuMiAtMS4yICAxLjggLTAuMiAtMS4yIC0yLjIgIDAuOCAgMC44ICAwLjggXG4ifQ== -->
+<pre><code>   1    2    3    4    5    6    7    8    9   10 
+ 1.8 -1.2 -1.2  1.8 -0.2 -1.2 -2.2  0.8  0.8  0.8 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1935,21 +1942,38 @@ F-statistic: 72.73 on 1 and 8 DF,  p-value: 2.749e-05</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Anova table</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQoXCJMb3dlciBsaW1pdFwiKVxuYGBgIn0= -->
-<pre class="r"><code>print(&quot;Lower limit&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGYxMjEgPSBwcmVkaWN0KGZpdDEuMjEsbmV3ZGF0YSlcbnBmMTIxXG5gYGAifQ== -->
+<pre class="r"><code>pf121 = predict(fit1.21,newdata)
+pf121</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgMSAgICAyIFxuMTguMiAyNi4yIFxuIn0= -->
+<pre><code>   1    2 
+18.2 26.2 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubjwtZGltKENIMDFQUjIxKVsxXVxuYWxwaGE8LTAuMDFcbnhoPC0yXG5XPC0oMipxZigxLWFscGhhLDIsbi0yKSleMC41XG5NU0U8LXN1bShmaXQxLjIxJHJlc2lkdWFsc14yKS8obi0yKVxua3h4PC1zdW0oKHgtbWVhbih4KSleMilcblxucHJpbnQoXCJMb3dlciBsaW1pdFwiKVxuYGBgIn0= -->
+<pre class="r"><code>n&lt;-dim(CH01PR21)[1]
+alpha&lt;-0.01
+xh&lt;-2
+W&lt;-(2*qf(1-alpha,2,n-2))^0.5
+MSE&lt;-sum(fit1.21$residuals^2)/(n-2)
+kxx&lt;-sum((x-mean(x))^2)
+
+print(&quot;Lower limit&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiTG93ZXIgbGltaXRcIlxuIn0= -->
 <pre><code>[1] &quot;Lower limit&quot;</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZml0MS4yMSRjb2VmZmljaWVudHNbMl0tcXQoLjAyNSw4LGxvd2VyLnRhaWw9RikqKChzdW0oZml0MS4yMSRyZXNpZHVhbHNeMikvOCkvKHN1bSgoeC1tZWFuKHgpKV4yKSkpXi41XG5gYGAifQ== -->
-<pre class="r"><code>fit1.21$coefficients[2]-qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGYxMjEkZml0WzFdLVcqKE1TRSooMS9uKyh4aC1tZWFuKHgpKV4yL2t4eCkpXi41XG5gYGAifQ== -->
+<pre class="r"><code>pf121$fit[1]-W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgIHggXG4yLjkxODM4OCBcbiJ9 -->
-<pre><code>       x 
-2.918388 </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE1LjQ0MTE2XG4ifQ== -->
+<pre><code>[1] 15.44116</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQoXCJVcHBlciBsaW1pdFwiKVxuYGBgIn0= -->
 <pre class="r"><code>print(&quot;Upper limit&quot;)</code></pre>
@@ -1957,16 +1981,57 @@ F-statistic: 72.73 on 1 and 8 DF,  p-value: 2.749e-05</code></pre>
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiVXBwZXIgbGltaXRcIlxuIn0= -->
 <pre><code>[1] &quot;Upper limit&quot;</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZml0MS4yMSRjb2VmZmljaWVudHNbMl0rcXQoLjAyNSw4LGxvd2VyLnRhaWw9RikqKChzdW0oZml0MS4yMSRyZXNpZHVhbHNeMikvOCkvKHN1bSgoeC1tZWFuKHgpKV4yKSkpXi41XG5gYGAifQ== -->
-<pre class="r"><code>fit1.21$coefficients[2]+qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGYxMjEkZml0WzFdK1cqKE1TRSooMS9uKyh4aC1tZWFuKHgpKV4yL2t4eCkpXi41XG5gYGAifQ== -->
+<pre class="r"><code>pf121$fit[1]+W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgIHggXG41LjA4MTYxMiBcbiJ9 -->
-<pre><code>       x 
-5.081612 </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIwLjk1ODg0XG4ifQ== -->
+<pre><code>[1] 20.95884</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Anova table</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubjwtZGltKENIMDFQUjIxKVsxXVxuYWxwaGE8LTAuMDFcbnhoPC00XG5XPC0oMipxZigxLWFscGhhLDIsbi0yKSleMC41XG5NU0U8LXN1bShmaXQxLjIxJHJlc2lkdWFsc14yKS8obi0yKVxua3h4PC1zdW0oKHgtbWVhbih4KSleMilcblxucHJpbnQoXCJMb3dlciBsaW1pdFwiKVxuYGBgIn0= -->
+<pre class="r"><code>n&lt;-dim(CH01PR21)[1]
+alpha&lt;-0.01
+xh&lt;-4
+W&lt;-(2*qf(1-alpha,2,n-2))^0.5
+MSE&lt;-sum(fit1.21$residuals^2)/(n-2)
+kxx&lt;-sum((x-mean(x))^2)
+
+print(&quot;Lower limit&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiTG93ZXIgbGltaXRcIlxuIn0= -->
+<pre><code>[1] &quot;Lower limit&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGYxMjEkZml0WzJdLVcqKE1TRSooMS9uKyh4aC1tZWFuKHgpKV4yL2t4eCkpXi41XG5gYGAifQ== -->
+<pre class="r"><code>pf121$fit[2]-W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIwLjAzMTA0XG4ifQ== -->
+<pre><code>[1] 20.03104</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQoXCJVcHBlciBsaW1pdFwiKVxuYGBgIn0= -->
+<pre class="r"><code>print(&quot;Upper limit&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiVXBwZXIgbGltaXRcIlxuIn0= -->
+<pre><code>[1] &quot;Upper limit&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGYxMjEkZml0WzJdK1cqKE1TRSooMS9uKyh4aC1tZWFuKHgpKV4yL2t4eCkpXi41XG5gYGAifQ== -->
+<pre class="r"><code>pf121$fit[2]+W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDMyLjM2ODk2XG4ifQ== -->
+<pre><code>[1] 32.36896</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKE1TRSooMS9uKyh4aC1tZWFuKHgpKV4yL2t4eCkpXG5gYGAifQ== -->
+<pre class="r"><code>(MSE*(1/n+(xh-mean(x))^2/kxx))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIuMlxuIn0= -->
+<pre><code>[1] 2.2</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiU1RBVCA1MTAgTGVjdHVyZXMgMy00IgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgpUaGlzIGlzIGFuIFtSIE1hcmtkb3duXShodHRwOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tKSBOb3RlYm9vay4gV2hlbiB5b3UgZXhlY3V0ZSBjb2RlIHdpdGhpbiB0aGUgbm90ZWJvb2ssIHRoZSByZXN1bHRzIGFwcGVhciBiZW5lYXRoIHRoZSBjb2RlLgoKVGhpcyBmaXJzdCBjaHVuayBvZiBjb2RlIHNldHMgdGhlICJ3b3JraW5nIGRpcmVjdG9yeSIgYXMgdGhlIGZvbGRlciB3aGVyZSB5b3UgaGF2ZSBkb3dubG9hZGVkIHRoZSAiS3V0bmVyRGF0YSIgZm9sZGVyLiBSZXBsYWNlIHRoZSBwYXRoIGJldHdlZW4gdGhlICdhcG9zdHJvcGhlcycgd2l0aCB0aGUgcGF0aCBvbiB5b3VyIGRldmljZS4gVGhlbiBwcmVzcyB0aGUgZ3JlZW4gInBsYXkiIGJ1dHRvbiB0byBydW4gaXQuCgpgYGB7ciwgc2V0dXAsIGluY2x1ZGU9RkFMU0V9CmtuaXRyOjpvcHRzX2tuaXQkc2V0KHJvb3QuZGlyID0gJy9Vc2Vycy9rYWdiYXN1YXJheS9EZXNrdG9wL0NTVUxCL0NsYXNzZXMvNTEwL1NUQVQ1MTBfQ29kZS9LdXRuZXJEYXRhL0NoYXB0ZXIgIDEgRGF0YSBTZXRzJykKYGBgCgpOb3csIHRvIGltcG9ydCB0aGUgZGF0YSBpbnRvIFIgZm9yIGFuYWx5c2lzLCB3ZSB3aWxsIHVzZSB0aGUgKipyZWFkcioqIHBhY2thZ2UuIFNpbmNlIGl0IGlzIG5vdCBhY3RpdmF0ZWQgYnkgZGVmYXVsdCwgd2UgbmVlZCB0byBydW4gdGhlICpsaWJyYXJ5KiBjb21tYW5kOgoKYGBge3J9CmxpYnJhcnkocmVhZHIpCmBgYAoKTGV0J3MgY29udGludWUgdG8gd29yayB3aXRoIEV4ZXJjaXNlIDEuMjEKCmBgYHtyfQpDSDAxUFIyMSA8LSByZWFkX3RhYmxlKCJDSDAxUFIyMS50eHQiLCBjb2xfbmFtZXMgPSBGQUxTRSkgICAgI1RoaXMgY29kZSBpbXBvcnRzIHRoZSBkYXRhCgp5PC1DSDAxUFIyMSRYMSAgICAgICNUaGlzIGNvZGUgcmVuYW1lcyB0aGUgdmFyaWFibGVzCng8LUNIMDFQUjIxJFgyCgpmaXQxLjIxPC1sbSh5fngpCmBgYAoKTW9kZWwgc3VtbWFyeSB3aXRoIHBhcmFtZXRlciBlc3RpbWF0ZXMsIHN0YW5kYXJkIGVycm9ycywgdGVzdCBzdGF0aXN0aWNzLCBwLXZhbHVlcyBhbmQgbW9yZSBFeGVyY2lzZSAyLjZiCgpgYGB7cn0Kc3VtbWFyeShmaXQxLjIxKQpgYGAKClBhcmFtZXRlciBFc3RpbWF0aW9uIEV4ZXJjaXNlIDIuNmEKCmBgYHtyfQpjb25maW50KGZpdDEuMjEpCmBgYAoKTGV0J3MgdmVyaWZ5CgpgYGB7cn0KcHJpbnQoIkxvd2VyIGxpbWl0IikKZml0MS4yMSRjb2VmZmljaWVudHNbMl0tcXQoLjAyNSw4LGxvd2VyLnRhaWw9RikqKChzdW0oZml0MS4yMSRyZXNpZHVhbHNeMikvOCkvKHN1bSgoeC1tZWFuKHgpKV4yKSkpXi41CnByaW50KCJVcHBlciBsaW1pdCIpCmZpdDEuMjEkY29lZmZpY2llbnRzWzJdK3F0KC4wMjUsOCxsb3dlci50YWlsPUYpKigoc3VtKGZpdDEuMjEkcmVzaWR1YWxzXjIpLzgpLyhzdW0oKHgtbWVhbih4KSleMikpKV4uNQpgYGAKCkNvbmZpZGVuY2UgaW50ZXJ2YWxzIGZvciBtZWFuIHJlc3BvbnNlIGFuZCBwcmVkaWN0aW9uIGludGVydmFscyBmb3IgZnV0dXJlIGluZGVwZW5kZW50IHJlc3BvbnNlcy4gRXhlcmNpc2UgMi4xNWFiCgpgYGB7cn0KI0NyZWF0ZSBhIGRhdGEgZnJhbWUgd2l0aCBuZXcgZXhwbGFuYXRvcnkgdmFsdWVzCm5ld2RhdGE8LWRhdGEuZnJhbWUoeD1jKDIsNCkpCnByaW50KCJGaXR0ZWQgdmFsdWUsIGxvd2VyIGFuZCB1cHBlciBib3VuZHMgZm9yIGNvbmZpZGVuY2UgaW50ZXJ2YWwiKQpwcmVkaWN0KGZpdDEuMjEsbmV3ZGF0YSxpbnRlcnZhbD0iY29uZmlkZW5jZSIsbGV2ZWwgPSAuOTkpCiNUaGUgdHdvIHJvd3Mgb2Ygb3V0IGNvcnJlc3BvbmQgdG8geD0yIGFuZCB4PTQgcmVzcGVjdGl2ZWx5CgpwcmludCgiRml0dGVkIHZhbHVlLCBsb3dlciBhbmQgdXBwZXIgYm91bmRzIGZvciBwcmVkaWN0aW9uIGludGVydmFsIikKcHJlZGljdChmaXQxLjIxLG5ld2RhdGEsaW50ZXJ2YWw9InByZWRpY3QiLGxldmVsID0gLjk5KQoKc3VtbWFyeShmaXQxLjIxKQpgYGAKCkNvbmZpZGVuY2UgYmFuZAoKYGBge3J9CnByaW50KCJMb3dlciBsaW1pdCIpCmZpdDEuMjEkY29lZmZpY2llbnRzWzJdLXF0KC4wMjUsOCxsb3dlci50YWlsPUYpKigoc3VtKGZpdDEuMjEkcmVzaWR1YWxzXjIpLzgpLyhzdW0oKHgtbWVhbih4KSleMikpKV4uNQpwcmludCgiVXBwZXIgbGltaXQiKQpmaXQxLjIxJGNvZWZmaWNpZW50c1syXStxdCguMDI1LDgsbG93ZXIudGFpbD1GKSooKHN1bShmaXQxLjIxJHJlc2lkdWFsc14yKS84KS8oc3VtKCh4LW1lYW4oeCkpXjIpKSleLjUKYGBgCgpBbm92YSB0YWJsZQoKYGBge3J9CmFub3ZhKGZpdDEuMjEpCmBgYAo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiU1RBVCA1MTAgTGVjdHVyZXMgMy00IgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgpUaGlzIGlzIGFuIFtSIE1hcmtkb3duXShodHRwOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tKSBOb3RlYm9vay4gV2hlbiB5b3UgZXhlY3V0ZSBjb2RlIHdpdGhpbiB0aGUgbm90ZWJvb2ssIHRoZSByZXN1bHRzIGFwcGVhciBiZW5lYXRoIHRoZSBjb2RlLgoKVGhpcyBmaXJzdCBjaHVuayBvZiBjb2RlIHNldHMgdGhlICJ3b3JraW5nIGRpcmVjdG9yeSIgYXMgdGhlIGZvbGRlciB3aGVyZSB5b3UgaGF2ZSBkb3dubG9hZGVkIHRoZSAiS3V0bmVyRGF0YSIgZm9sZGVyLiBSZXBsYWNlIHRoZSBwYXRoIGJldHdlZW4gdGhlICdhcG9zdHJvcGhlcycgd2l0aCB0aGUgcGF0aCBvbiB5b3VyIGRldmljZS4gVGhlbiBwcmVzcyB0aGUgZ3JlZW4gInBsYXkiIGJ1dHRvbiB0byBydW4gaXQuCgpgYGB7ciwgc2V0dXAsIGluY2x1ZGU9RkFMU0V9CmtuaXRyOjpvcHRzX2tuaXQkc2V0KHJvb3QuZGlyID0gJy9Vc2Vycy9rYWdiYXN1YXJheS9EZXNrdG9wL0NTVUxCL0NsYXNzZXMvNTEwL1NUQVQ1MTBfQ29kZS9LdXRuZXJEYXRhL0NoYXB0ZXIgIDEgRGF0YSBTZXRzJykKYGBgCgpOb3csIHRvIGltcG9ydCB0aGUgZGF0YSBpbnRvIFIgZm9yIGFuYWx5c2lzLCB3ZSB3aWxsIHVzZSB0aGUgKipyZWFkcioqIHBhY2thZ2UuIFNpbmNlIGl0IGlzIG5vdCBhY3RpdmF0ZWQgYnkgZGVmYXVsdCwgd2UgbmVlZCB0byBydW4gdGhlICpsaWJyYXJ5KiBjb21tYW5kOgoKYGBge3J9CmxpYnJhcnkocmVhZHIpCmBgYAoKTGV0J3MgY29udGludWUgdG8gd29yayB3aXRoIEV4ZXJjaXNlIDEuMjEKCmBgYHtyfQpDSDAxUFIyMSA8LSByZWFkX3RhYmxlKCJDSDAxUFIyMS50eHQiLCBjb2xfbmFtZXMgPSBGQUxTRSkgICAgI1RoaXMgY29kZSBpbXBvcnRzIHRoZSBkYXRhCgp5PC1DSDAxUFIyMSRYMSAgICAgICNUaGlzIGNvZGUgcmVuYW1lcyB0aGUgdmFyaWFibGVzCng8LUNIMDFQUjIxJFgyCgpmaXQxLjIxPC1sbSh5fngpCmBgYAoKTW9kZWwgc3VtbWFyeSB3aXRoIHBhcmFtZXRlciBlc3RpbWF0ZXMsIHN0YW5kYXJkIGVycm9ycywgdGVzdCBzdGF0aXN0aWNzLCBwLXZhbHVlcyBhbmQgbW9yZSBFeGVyY2lzZSAyLjZiCgpgYGB7cn0Kc3VtbWFyeShmaXQxLjIxKQpgYGAKClBhcmFtZXRlciBFc3RpbWF0aW9uIEV4ZXJjaXNlIDIuNmEKCmBgYHtyfQpjb25maW50KGZpdDEuMjEsbGV2ZWw9MC45NSkKYGBgCgpMZXQncyB2ZXJpZnkKCmBgYHtyfQpwcmludCgiTG93ZXIgbGltaXQiKQpmaXQxLjIxJGNvZWZmaWNpZW50c1syXS1xdCguMDI1LDgsbG93ZXIudGFpbD1GKSooKHN1bShmaXQxLjIxJHJlc2lkdWFsc14yKS84KS8oc3VtKCh4LW1lYW4oeCkpXjIpKSleLjUKcHJpbnQoIlVwcGVyIGxpbWl0IikKZml0MS4yMSRjb2VmZmljaWVudHNbMl0rcXQoLjAyNSw4LGxvd2VyLnRhaWw9RikqKChzdW0oZml0MS4yMSRyZXNpZHVhbHNeMikvOCkvKHN1bSgoeC1tZWFuKHgpKV4yKSkpXi41CgpmaXQxLjIxJHJlc2lkdWFscwpgYGAKCkNvbmZpZGVuY2UgaW50ZXJ2YWxzIGZvciBtZWFuIHJlc3BvbnNlIGFuZCBwcmVkaWN0aW9uIGludGVydmFscyBmb3IgZnV0dXJlIGluZGVwZW5kZW50IHJlc3BvbnNlcy4gRXhlcmNpc2UgMi4xNWFiCgpgYGB7cn0KI0NyZWF0ZSBhIGRhdGEgZnJhbWUgd2l0aCBuZXcgZXhwbGFuYXRvcnkgdmFsdWVzCm5ld2RhdGE8LWRhdGEuZnJhbWUoeD1jKDIsNCkpCnByaW50KCJGaXR0ZWQgdmFsdWUsIGxvd2VyIGFuZCB1cHBlciBib3VuZHMgZm9yIGNvbmZpZGVuY2UgaW50ZXJ2YWwiKQpwcmVkaWN0KGZpdDEuMjEsbmV3ZGF0YSxpbnRlcnZhbD0iY29uZmlkZW5jZSIsbGV2ZWwgPSAuOTkpCiNUaGUgdHdvIHJvd3Mgb2Ygb3V0IGNvcnJlc3BvbmQgdG8geD0yIGFuZCB4PTQgcmVzcGVjdGl2ZWx5CgpwcmludCgiRml0dGVkIHZhbHVlLCBsb3dlciBhbmQgdXBwZXIgYm91bmRzIGZvciBwcmVkaWN0aW9uIGludGVydmFsIikKcHJlZGljdChmaXQxLjIxLG5ld2RhdGEsaW50ZXJ2YWw9InByZWRpY3QiLGxldmVsID0gLjk5KQoKc3VtbWFyeShmaXQxLjIxKQpgYGAKCkNvbmZpZGVuY2UgYmFuZAoKYGBge3J9CnBmMTIxID0gcHJlZGljdChmaXQxLjIxLG5ld2RhdGEpCnBmMTIxCmBgYAoKYGBge3J9Cm48LWRpbShDSDAxUFIyMSlbMV0KYWxwaGE8LTAuMDEKeGg8LTIKVzwtKDIqcWYoMS1hbHBoYSwyLG4tMikpXjAuNQpNU0U8LXN1bShmaXQxLjIxJHJlc2lkdWFsc14yKS8obi0yKQpreHg8LXN1bSgoeC1tZWFuKHgpKV4yKQoKcHJpbnQoIkxvd2VyIGxpbWl0IikKcGYxMjFbMV0tVyooTVNFKigxL24rKHhoLW1lYW4oeCkpXjIva3h4KSleLjUKCnByaW50KCJVcHBlciBsaW1pdCIpCnBmMTIxWzFdK1cqKE1TRSooMS9uKyh4aC1tZWFuKHgpKV4yL2t4eCkpXi41CmBgYAoKYGBge3J9Cm48LWRpbShDSDAxUFIyMSlbMV0KYWxwaGE8LTAuMDEKeGg8LTQKVzwtKDIqcWYoMS1hbHBoYSwyLG4tMikpXjAuNQpNU0U8LXN1bShmaXQxLjIxJHJlc2lkdWFsc14yKS8obi0yKQpreHg8LXN1bSgoeC1tZWFuKHgpKV4yKQoKcHJpbnQoIkxvd2VyIGxpbWl0IikKcGYxMjFbMl0tVyooTVNFKigxL24rKHhoLW1lYW4oeCkpXjIva3h4KSleLjUKCnByaW50KCJVcHBlciBsaW1pdCIpCnBmMTIxWzJdK1cqKE1TRSooMS9uKyh4aC1tZWFuKHgpKV4yL2t4eCkpXi41CgooTVNFKigxL24rKHhoLW1lYW4oeCkpXjIva3h4KSkKCmBgYAoKQW5vdmEgdGFibGUKCmBgYHtyfQphbm92YShmaXQxLjIxKQpgYGAK</div>
 
 
 
