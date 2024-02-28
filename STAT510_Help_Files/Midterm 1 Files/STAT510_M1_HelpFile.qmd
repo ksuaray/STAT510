@@ -1,0 +1,166 @@
+---
+title: "STAT 510 MIDTERM 1"
+output: html_notebook
+---
+
+## Install and Load Required Packages
+
+```{r}
+install.packages("dplyr")
+install.packages("plotly")
+install.packages("rmarkdown")
+library(dplyr)
+library(plotly)
+library(rmarkdown)
+```
+
+## **Importing the Data**
+
+For the Exam, we will use the **Import Dataset** menu on the right instead of uploading from within the notebook.
+
+1.  Download the appropriate data from Canvas/GitHub
+2.  Click **Import Dataset**
+3.  Select the first option: **From Base (Text)**
+4.  Go to the Downloads folder and select your data
+5.  Note the name of the dataset and click **Import**
+
+# **Simple Linear Regression Analysis**
+
+Let's continue to work with Exercise 1.21
+
+```{r}
+y<-CH01PR21$V1      #This code renames the variables. Note that variables are labeled "V1" not "X1"
+x<-CH01PR21$V2
+```
+
+The following code executes a **simple linear regression** analysis from model fitting to anova output to interactive scatterplot with line of best fit. See comments below.
+
+Fit the model:
+
+```{r}
+fit1.21<-lm(y~x)
+```
+
+Scatterplot:
+
+```{R}
+# Create the scatterplot with a line of best fit
+scatter_plot <- plot_ly(data=CH01PR21, x = ~x, y = ~y, mode = "markers", type = "scatter", name = "Data") %>%  
+
+    add_trace(mode = "lines", type = "scatter", line = list(color = "red"), y = lm(y~x,data=CH01PR21)$fitted.values, name = "Line of Best Fit") %>%
+  layout(title = "Scatterplot with Line of Best Fit",
+         xaxis = list(title = "X-Axis Label"),
+         yaxis = list(title = "Y-Axis Label"))
+
+# Print the plot
+print(scatter_plot)
+
+```
+
+**Model summary** with parameter estimates, standard errors, test statistics, p-values and more Exercise 2.6b
+
+```{r}
+summary(fit1.21)
+```
+
+**Parameter Estimation Exercise 2.6a**
+
+```{r}
+confint(fit1.21,level=0.95)
+```
+
+Let's verify
+
+```{r}
+print("Lower limit")
+fit1.21$coefficients[2]-qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5
+print("Upper limit")
+fit1.21$coefficients[2]+qt(.025,8,lower.tail=F)*((sum(fit1.21$residuals^2)/8)/(sum((x-mean(x))^2)))^.5
+
+fit1.21$residuals
+```
+
+**Confidence intervals** for mean response and **prediction intervals** for future independent responses. Exercise 2.15ab
+
+```{r}
+#Create a data frame with new explanatory values
+newdata<-data.frame(x=c(2,4))
+print("Fitted value, lower and upper bounds for confidence interval")
+predict(fit1.21,newdata,interval="confidence",level = .99)
+#The two rows of out correspond to x=2 and x=4 respectively
+
+print("Fitted value, lower and upper bounds for prediction interval")
+predict(fit1.21,newdata,interval="predict",level = .99)
+
+summary(fit1.21)
+```
+
+**Confidence band**
+
+```{r}
+pf121 = predict(fit1.21,newdata)
+pf121
+```
+
+```{r}
+n<-dim(CH01PR21)[1]
+alpha<-0.01
+xh<-2
+W<-(2*qf(1-alpha,2,n-2))^0.5
+MSE<-sum(fit1.21$residuals^2)/(n-2)
+kxx<-sum((x-mean(x))^2)
+
+print("Lower limit")
+pf121[1]-W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
+
+print("Upper limit")
+pf121[1]+W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
+```
+
+```{r}
+n<-dim(CH01PR21)[1]
+alpha<-0.01
+xh<-4
+W<-(2*qf(1-alpha,2,n-2))^0.5
+MSE<-sum(fit1.21$residuals^2)/(n-2)
+kxx<-sum((x-mean(x))^2)
+
+print("Lower limit")
+pf121[2]-W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
+
+print("Upper limit")
+pf121[2]+W*(MSE*(1/n+(xh-mean(x))^2/kxx))^.5
+
+(MSE*(1/n+(xh-mean(x))^2/kxx))
+
+```
+
+**Anova table**
+
+```{r}
+anova(fit1.21)
+```
+
+# Multiple Linear Regression
+
+As done above, first import the data using the menu on the right. Then assign variables:
+
+```{r}
+y<-CH06PR18$V1      #This code renames the variables
+x1<-CH06PR18$V2
+x2<-CH06PR18$V3
+x3<-CH06PR18$V4
+x4<-CH06PR18$V5
+```
+
+Fit the Multiple Linear Regression (MLR) model:
+
+```{r}
+fit6.18<-lm(y~x1+x2+x3+x4)
+```
+
+**The Big Picture** *Model Summary* Model summary with parameter estimates, standard errors, test statistics, p-values and more
+
+```{r}
+summary(fit6.18)
+```
