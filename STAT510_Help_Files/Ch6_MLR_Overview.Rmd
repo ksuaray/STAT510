@@ -3,14 +3,13 @@ title: "STAT 510 Lectures 7-8"
 output: html_notebook
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code.
 
 This first chunk of code sets the "working directory" as the folder where you have downloaded the "KutnerData" folder. Replace the path between the 'apostrophes' with the path on your device. Then press the green "play" button to run it.
 
 ```{r, setup, include=FALSE}
-knitr::opts_knit$set(root.dir = '/Volumes/5ive3rds/CSULB/Classes/510/Data/Data Sets KN/KutnerData/Chapter  6 Data Sets/')
+knitr::opts_knit$set(root.dir = '/Users/kagbasuaray/Desktop/CSULB/Classes/510/STAT510_Code/KutnerData/Chapter 6 Data Sets')
 ```
-
 
 Now, to import the data into R for analysis, we will use the **readr** package. Since it is not activated by default, we need to run the *library* command:
 
@@ -21,7 +20,7 @@ library(readr)
 Let's continue to work with Exercise 6.18
 
 ```{r}
-CH06PR18 <- read_table("CH06PR18.txt", col_names = FALSE)    #This code imports the data
+CH06PR18 <- read_table("/Users/kagbasuaray/Desktop/CSULB/Classes/510/STAT510_Code/KutnerData/Chapter 6 Data Sets/CH06PR18.txt", col_names = FALSE)    #This code imports the data
 
 y<-CH06PR18$X1      #This code renames the variables
 x1<-CH06PR18$X2
@@ -39,23 +38,20 @@ data<-CH06PR18
 fit<-fit6.18
 ```
 
-
-**The Big Picture**
-*Model Summary*
-Model summary with parameter estimates, standard errors, test statistics, p-values and more
+**The Big Picture** *Model Summary* Model summary with parameter estimates, standard errors, test statistics, p-values and more
 
 ```{r}
 summary(fit)
 ```
 
 *Anova Table*
+
 ```{r}
 anova(fit)
 ```
 
+*Parameter Estimation* In addition to the point estimates from the summary output above, we can determine confidence intervals for each beta:
 
-*Parameter Estimation*
-In addition to the point estimates from the summary output above, we can determine confidence intervals for each beta:
 ```{r}
 cl<-0.98
 confint(fit,level=cl)
@@ -88,7 +84,6 @@ print("Upper limit")
 fit$coefficients[ind]+qt(a,df,lower.tail=F)*(v*MSE)^.5
 ```
 
-
 Confidence intervals for mean response and prediction intervals for future independent responses.
 
 ```{r}
@@ -104,8 +99,8 @@ predict(fit,newdata,interval="predict",level = .99)
 
 ```
 
-
 Let's verify
+
 ```{r}
 x1=14
 x2=8.19
@@ -130,8 +125,8 @@ print("Upper limit")
 yh+qt(a,df,lower.tail=F)*(sy*MSE)^.5
 ```
 
-
 Confidence REGION
+
 ```{r}
 clb<-0.95      #Confidence Level
 
@@ -162,14 +157,3 @@ cor(data)
 #Scatterplot matrix
 pairs(data)
 ```
-
-
-
-
-
-
-
-
-
-
-

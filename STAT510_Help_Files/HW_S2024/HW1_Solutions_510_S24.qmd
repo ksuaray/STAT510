@@ -104,13 +104,13 @@ We want to minimize
 
 $S(\beta_0)=\sum_{i=1}^n (y_i-\beta_0)^2$ .
 
-Taking the derivative with respect to $\beta_0$ and seting equal to 0, we get
+Taking the derivative with respect to $\beta_0$ and setting equal to 0, we get
 
 $S'(\beta_0)=2\sum_{i=1}^n (y_i-\beta_0)=0$ .
 
 Thus
 
-\\sum\_{i=1}\^n y_i-n\\beta_0
+$\sum_{i=1}^n y_i-n\beta_0$
 
 and $b_0=\bar{y}$.
 
